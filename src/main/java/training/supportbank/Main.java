@@ -6,7 +6,7 @@ import java.text.ParseException;
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
         // parse CSV file into a TransactionList
-        TransactionList transactionList = TransactionList.fromFile("data/Transactions2014.csv");
+        TransactionList transactionList = TransactionList.fromFile("data/DodgyTransactions2015.csv");
 
         // command line options
         // in future, perhaps an idea to use a dedicated CLI package instead of parsing them by hand?
