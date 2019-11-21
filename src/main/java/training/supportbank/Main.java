@@ -1,12 +1,19 @@
 package training.supportbank;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.text.ParseException;
 
 public class Main {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public static void main(String[] args) throws IOException, ParseException {
         // parse CSV file into a TransactionList
-        TransactionList transactionList = TransactionList.fromFile("data/DodgyTransactions2015.csv");
+        String csvPath = "data/DodgyTransactions2015.csv";
+        LOGGER.info(String.format("Attempting to load transaction list from file %s", csvPath));
+        TransactionList transactionList = TransactionList.fromFile(csvPath);
 
         // command line options
         // in future, perhaps an idea to use a dedicated CLI package instead of parsing them by hand?

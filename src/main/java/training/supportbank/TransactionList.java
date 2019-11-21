@@ -1,12 +1,18 @@
 package training.supportbank;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class TransactionList {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private ArrayList<Transaction> transactionList;
     private ArrayList<String> uniqueNames;
 
@@ -15,13 +21,13 @@ public class TransactionList {
         uniqueNames = new ArrayList<>();
     }
 
-    public static TransactionList fromFile(String path) throws IOException, ParseException {
+    public static TransactionList fromFile(String path) throws IOException {
         TransactionList list = new TransactionList();
         list.readFile(path);
         return list;
     }
 
-    public void readFile(String path) throws IOException, ParseException {
+    public void readFile(String path) throws IOException {
         // open file
         File file = new File(path);
         FileReader fileReader = new FileReader(file);
@@ -31,7 +37,13 @@ public class TransactionList {
         clear();
         reader.readLine();
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-            addTransaction(Transaction.fromCSVLine(line));
+            try {
+                addTransaction(Transaction.fromCSVLine(line));
+            } catch (RuntimeException e) {
+                String errorMessage = String.format("Error reading CSV line \"%s\". Skipped line.", line);
+                LOGGER.warn(errorMessage);
+                System.out.println(errorMessage);
+            }
         }
     }
 
