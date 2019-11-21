@@ -48,4 +48,12 @@ public class TransactionList {
     public ArrayList<Transaction> getTransactions() {
         return transactionList;
     }
+
+    public void listAll() {
+        // TODO
+    }
+
+    public void list(String name) {
+        // TODO
+    }
 }
