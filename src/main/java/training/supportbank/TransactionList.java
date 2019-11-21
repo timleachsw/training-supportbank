@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class TransactionList {
     private ArrayList<Transaction> transactionList;
+    private ArrayList<String> uniqueNames;
 
     public TransactionList() {
         transactionList = new ArrayList<>();
+        uniqueNames = new ArrayList<>();
     }
 
     public static TransactionList fromFile(String path) throws IOException, ParseException {
@@ -39,6 +41,14 @@ public class TransactionList {
 
     public void addTransaction(Transaction transaction) {
         transactionList.add(transaction);
+        String from = transaction.getFrom();
+        String to = transaction.getTo();
+        if (!uniqueNames.contains(from)) {
+            uniqueNames.add(from);
+        }
+        if (!uniqueNames.contains(to)) {
+            uniqueNames.add(to);
+        }
     }
 
     public void addTransaction(LocalDate date, String from, String to, String narrative, BigDecimal amount) {
@@ -50,7 +60,9 @@ public class TransactionList {
     }
 
     public void listAll() {
-        // TODO
+        for (String name: uniqueNames) {
+            System.out.println(String.format("%10s: £%s", name, balance(name).toPlainString()));
+        }
     }
 
     public void list(String name) {
