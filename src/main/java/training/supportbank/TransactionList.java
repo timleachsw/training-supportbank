@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TransactionList {
-    private ArrayList<Transaction> _transactionList;
+    private ArrayList<Transaction> transactionList;
 
     public TransactionList() {
-        _transactionList = new ArrayList<>();
+        transactionList = new ArrayList<>();
     }
 
     public static TransactionList fromFile(String path) throws IOException, ParseException {
@@ -34,18 +34,18 @@ public class TransactionList {
     }
 
     public void clear() {
-        _transactionList.clear();
+        transactionList.clear();
     }
 
     public void addTransaction(Transaction transaction) {
-        _transactionList.add(transaction);
+        transactionList.add(transaction);
     }
 
     public void addTransaction(LocalDate date, String from, String to, String narrative, BigDecimal amount) {
-        _transactionList.add(new Transaction(date, from, to, narrative, amount));
+        transactionList.add(new Transaction(date, from, to, narrative, amount));
     }
 
     public ArrayList<Transaction> getTransactions() {
-        return _transactionList;
+        return transactionList;
     }
 }
