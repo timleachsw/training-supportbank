@@ -1,40 +1,50 @@
 package training.supportbank;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
-    private Date _date;
-    private String _from;
-    private String _to;
-    private String _narrative;
-    private BigDecimal _amount;
+    private LocalDate date;
+    private String from;
+    private String to;
+    private String narrative;
+    private BigDecimal amount;
 
-    public Transaction(Date date, String from, String to, String narrative, BigDecimal amount) {
-        _date = date;
-        _from = from;
-        _to = to;
-        _narrative = narrative;
-        _amount = amount;
+    public Transaction(LocalDate date, String from, String to, String narrative, BigDecimal amount) {
+        this.date = date;
+        this.from = from;
+        this.to = to;
+        this.narrative = narrative;
+        this.amount = amount;
     }
 
-    public Date get_date() {
-        return _date;
+    public static Transaction fromCSVLine(String line) throws ParseException {
+        // split line at commas
+        String[] splitLine = line.split(",");
+        LocalDate date = LocalDate.parse(splitLine[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        BigDecimal amount = new BigDecimal(splitLine[4]);
+        return new Transaction(date, splitLine[1], splitLine[2], splitLine[3], amount);
     }
 
-    public String get_from() {
-        return _from;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public String get_to() {
-        return _to;
+    public String getFrom() {
+        return from;
     }
 
-    public String get_narrative() {
-        return _narrative;
+    public String getTo() {
+        return to;
     }
 
-    public BigDecimal get_amount() {
-        return _amount;
+    public String getNarrative() {
+        return narrative;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
     }
 }
