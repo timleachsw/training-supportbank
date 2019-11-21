@@ -54,6 +54,43 @@ public class TransactionList {
     }
 
     public void list(String name) {
-        // TODO
+        System.out.println(String.format("%s balance: £%s", name, balance(name).toPlainString()));
+        System.out.println("Transaction list:");
+        for (Transaction transaction: transactionList) {
+            if (transaction.involves(name)) {
+                System.out.println(String.format("%1$tY/%1$tm/%1$td: %2$6s\t%3$-16s%4$s",
+                        transaction.getDate(),
+                        "£" + transaction.getAmount().toPlainString(),
+                        transaction.getFrom().equals(name)
+                                ? "  to " + transaction.getTo()
+                                : "from " + transaction.getFrom(),
+                        transaction.getNarrative()));
+            }
+        }
+    }
+
+    public boolean includes(String name) {
+        for (Transaction transaction: transactionList) {
+            if (transaction.involves(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public BigDecimal balance(String name) {
+        // iterate through all transactions, keeping a tally
+        // returns ZERO if name does not match
+        BigDecimal balance = BigDecimal.ZERO;
+        for (Transaction transaction: transactionList) {
+            if (transaction.involves(name)) {
+                if (transaction.getFrom().equals(name)) {
+                    balance = balance.subtract(transaction.getAmount());
+                } else {
+                    balance = balance.add(transaction.getAmount());
+                }
+            }
+        }
+        return balance;
     }
 }

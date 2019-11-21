@@ -47,4 +47,8 @@ public class Transaction {
     public BigDecimal getAmount() {
         return amount;
     }
+
+    public boolean involves(String name) {
+        return name.equals(from) || name.equals(to);
+    }
 }
