@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -23,7 +23,7 @@ public class Main {
             // load file
             String path = args[0];
             LOGGER.info(String.format("Attempting to load transaction list from file %s", path));
-            transactionList = new TransactionList(path);
+            transactionList = TransactionListParser.getParserFor(new File(path)).parse();
         }
         if (args[2].equals("all")) {
             transactionList.listAll();
