@@ -4,6 +4,11 @@ import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.util.StreamReaderDelegate;
+import javax.xml.transform.stax.StAXSource;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -24,13 +29,13 @@ public class TransactionList {
         uniqueNames = new ArrayList<>();
     }
 
-    public TransactionList(String path) throws IOException {
+    public TransactionList(String path) throws IOException, XMLStreamException {
         transactionList = new ArrayList<>();
         uniqueNames = new ArrayList<>();
         readFile(path);
     }
 
-    public void readFile(String path) throws IOException {
+    public void readFile(String path) throws IOException, XMLStreamException {
         // CSV or JSON?
         if (path.matches(".*\\.csv")) {
             // open file
@@ -59,6 +64,13 @@ public class TransactionList {
             for (Transaction.TransactionJSON transactionJSON: transactionArray) {
                 addTransaction(new Transaction(transactionJSON));
             }
+        } else if (path.matches(".*\\.xml")) {
+            // parse XML using StAX
+            File file = new File(path);
+            FileReader fileReader = new FileReader(file);
+            XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
+            XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(fileReader);
+            StAXSource stAXSource = new StAXSource(xmlStreamReader);
         } else {
             Matcher fileTypeMatcher = Pattern.compile(".*(\\..*$)").matcher(path);
             if (fileTypeMatcher.find()) {

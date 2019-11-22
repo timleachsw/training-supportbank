@@ -3,13 +3,14 @@ package training.supportbank;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.text.ParseException;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, XMLStreamException {
         TransactionList transactionList;
         // command line options
         // in future, perhaps an idea to use a dedicated CLI package instead of parsing them by hand?
