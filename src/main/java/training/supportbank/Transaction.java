@@ -4,8 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -13,17 +11,35 @@ public class Transaction {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private LocalDate date;
-    private String from;
-    private String to;
+    private String fromAccount;
+    private String toAccount;
     private String narrative;
     private BigDecimal amount;
 
-    public Transaction(LocalDate date, String from, String to, String narrative, BigDecimal amount) {
+    public class TransactionJSON {
+        public String date;
+        public String fromAccount;
+        public String toAccount;
+        public String narrative;
+        public BigDecimal amount;
+    }
+
+    public Transaction(LocalDate date, String fromAccount, String toAccount, String narrative, BigDecimal amount) {
         this.date = date;
-        this.from = from;
-        this.to = to;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
         this.narrative = narrative;
         this.amount = amount;
+    }
+
+    public Transaction(TransactionJSON transactionJSON) {
+        // note for the following that the format is different
+        // the JSON file uses yyyy-mm-dd but the CSV uses dd/mm/yyyy
+        this.date = LocalDate.parse(transactionJSON.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.fromAccount = transactionJSON.fromAccount;
+        this.toAccount = transactionJSON.toAccount;
+        this.narrative = transactionJSON.narrative;
+        this.amount = transactionJSON.amount;
     }
 
     public static Transaction fromCSVLine(String line) {
@@ -41,12 +57,12 @@ public class Transaction {
         return date;
     }
 
-    public String getFrom() {
-        return from;
+    public String getFromAccount() {
+        return fromAccount;
     }
 
-    public String getTo() {
-        return to;
+    public String getToAccount() {
+        return toAccount;
     }
 
     public String getNarrative() {
@@ -58,6 +74,6 @@ public class Transaction {
     }
 
     public boolean involves(String name) {
-        return name.equals(from) || name.equals(to);
+        return name.equals(fromAccount) || name.equals(toAccount);
     }
 }
