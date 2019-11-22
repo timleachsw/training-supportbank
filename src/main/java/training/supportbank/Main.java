@@ -22,7 +22,7 @@ public class Main {
             // load file
             String path = args[0];
             LOGGER.info(String.format("Attempting to load transaction list from file %s", path));
-            transactionList = TransactionList.fromFile(path);
+            transactionList = new TransactionList(path);
         }
         if (args[2].equals("all")) {
             transactionList.listAll();

@@ -24,6 +24,8 @@ public class Transaction {
         public BigDecimal amount;
     }
 
+    public Transaction() { }
+
     public Transaction(LocalDate date, String fromAccount, String toAccount, String narrative, BigDecimal amount) {
         this.date = date;
         this.fromAccount = fromAccount;
@@ -42,15 +44,22 @@ public class Transaction {
         this.amount = transactionJSON.amount;
     }
 
-    public static Transaction fromCSVLine(String line) {
-        // split line at commas
-        LOGGER.debug("Reading CSV line " + line);
-        String[] splitLine = line.split(",");
-        LOGGER.debug(String.format("Using LocalDate.parse() to read '%s' in the format dd/mm/yyyy", splitLine[0]));
-        LocalDate date = LocalDate.parse(splitLine[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LOGGER.debug(String.format("Using BigDecimal() to read '%s' as a BigDecimal", splitLine[4]));
-        BigDecimal amount = new BigDecimal(splitLine[4]);
-        return new Transaction(date, splitLine[1], splitLine[2], splitLine[3], amount);
+    public boolean readCSVLine(String line) {
+        try {
+            LOGGER.debug("Reading CSV line " + line);
+            String[] splitLine = line.split(",");
+            LOGGER.debug(String.format("Using LocalDate.parse() to read '%s' in the format dd/mm/yyyy", splitLine[0]));
+            this.date = LocalDate.parse(splitLine[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LOGGER.debug(String.format("Using BigDecimal() to read '%s' as a BigDecimal", splitLine[4]));
+            this.fromAccount = splitLine[1];
+            this.toAccount = splitLine[2];
+            this.narrative = splitLine[3];
+            this.amount = new BigDecimal(splitLine[4]);
+            return true;
+        } catch (RuntimeException e) {
+            LOGGER.warn(String.format("Unable to read CSV line \"%s\".", line));
+            return false;
+        }
     }
 
     public LocalDate getDate() {

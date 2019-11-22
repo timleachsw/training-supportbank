@@ -24,10 +24,10 @@ public class TransactionList {
         uniqueNames = new ArrayList<>();
     }
 
-    public static TransactionList fromFile(String path) throws IOException {
-        TransactionList list = new TransactionList();
-        list.readFile(path);
-        return list;
+    public TransactionList(String path) throws IOException {
+        transactionList = new ArrayList<>();
+        uniqueNames = new ArrayList<>();
+        readFile(path);
     }
 
     public void readFile(String path) throws IOException {
@@ -42,12 +42,10 @@ public class TransactionList {
             clear();
             reader.readLine();
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                try {
-                    addTransaction(Transaction.fromCSVLine(line));
-                } catch (RuntimeException e) {
-                    String errorMessage = String.format("Error reading CSV line \"%s\". Skipped line.", line);
-                    LOGGER.warn(errorMessage);
-                    System.out.println(errorMessage);
+                Transaction t = new Transaction();
+                // attempt to read line
+                if (t.readCSVLine(line)) {
+                    addTransaction(t);
                 }
             }
         } else if (path.matches(".*\\.json")) {
