@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TransactionList {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -58,6 +60,14 @@ public class TransactionList {
             // uniqueNames is being updated
             for (Transaction.TransactionJSON transactionJSON: transactionArray) {
                 addTransaction(new Transaction(transactionJSON));
+            }
+        } else {
+            Matcher fileTypeMatcher = Pattern.compile(".*(\\..*$)").matcher(path);
+            if (fileTypeMatcher.find()) {
+                throw new IllegalArgumentException(String.format("Don't know how to read %s files.",
+                        fileTypeMatcher.group(1)));
+            } else {
+                throw new IllegalArgumentException("Don't know how to read files with no extension.");
             }
         }
     }
