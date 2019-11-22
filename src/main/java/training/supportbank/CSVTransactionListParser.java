@@ -2,8 +2,14 @@ package training.supportbank;
 
 import java.io.*;
 
-public class CSVTransactionListParser extends TransactionListParser {
-    public TransactionList parseFile(File file) throws IOException {
+public class CSVTransactionListParser implements TransactionListParser {
+    private File file;
+
+    public CSVTransactionListParser(File file) {
+        this.file = file;
+    }
+
+    public TransactionList parse() throws IOException {
         TransactionList transactionList = new TransactionList();
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);

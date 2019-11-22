@@ -5,10 +5,15 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
-public class JSONTransactionListParser extends TransactionListParser {
-    public TransactionList parseFile(File file) throws IOException {
+public class JSONTransactionListParser implements TransactionListParser {
+    private File file;
+
+    public JSONTransactionListParser(File file) {
+        this.file = file;
+    }
+
+    public TransactionList parse() throws IOException {
         TransactionList transactionList = new TransactionList();
         // create Gson object and parse whole file as one string
         Gson gson = new Gson();
