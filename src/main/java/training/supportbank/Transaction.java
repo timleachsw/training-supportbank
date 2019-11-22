@@ -16,14 +16,6 @@ public class Transaction {
     private String narrative;
     private BigDecimal amount;
 
-    public class TransactionJSON {
-        public String date;
-        public String fromAccount;
-        public String toAccount;
-        public String narrative;
-        public BigDecimal amount;
-    }
-
     public Transaction() { }
 
     public Transaction(LocalDate date, String fromAccount, String toAccount, String narrative, BigDecimal amount) {
@@ -32,16 +24,6 @@ public class Transaction {
         this.toAccount = toAccount;
         this.narrative = narrative;
         this.amount = amount;
-    }
-
-    public Transaction(TransactionJSON transactionJSON) {
-        // note for the following that the format is different
-        // the JSON file uses yyyy-mm-dd but the CSV uses dd/mm/yyyy
-        this.date = LocalDate.parse(transactionJSON.date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.fromAccount = transactionJSON.fromAccount;
-        this.toAccount = transactionJSON.toAccount;
-        this.narrative = transactionJSON.narrative;
-        this.amount = transactionJSON.amount;
     }
 
     public boolean readCSVLine(String line) {
