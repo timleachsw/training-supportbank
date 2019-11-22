@@ -28,7 +28,7 @@ public class Main {
         if (args[2].equals("all")) {
             transactionList.listAll();
         } else {
-            transactionList.list(args[1]);
+            transactionList.list(args[2]);
         }
     }
 }
